@@ -21,6 +21,10 @@ public class JavaDBEx1 extends javax.swing.JFrame {
     /**
      * Creates new form JavaDBEx1
      */
+    
+    public int trackNum = 1;
+    public int buttonPressed=1;
+    
     public JavaDBEx1() {
         initComponents();
         
@@ -39,13 +43,13 @@ public class JavaDBEx1 extends javax.swing.JFrame {
               
               String results="";
               resultSet.next();
-              results+=resultSet.getObject(1);
+              results+=resultSet.getObject(trackNum);
               authorIDTextPane.setText(results);
               results="";
-              results+=resultSet.getObject(2);
+              results+=resultSet.getObject(trackNum+1);
               firstNameTextPane.setText(results);
               results="";
-              results+=resultSet.getObject(3);
+              results+=resultSet.getObject(trackNum+2);
               lastNameTextPane.setText(results);
         }
         
@@ -108,8 +112,18 @@ public class JavaDBEx1 extends javax.swing.JFrame {
         });
 
         previousButton.setText("<<Previous");
+        previousButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                previousButtonActionPerformed(evt);
+            }
+        });
 
         lastButton.setText("Last");
+        lastButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lastButtonActionPerformed(evt);
+            }
+        });
 
         exitButton.setText("Exit");
         exitButton.addActionListener(new java.awt.event.ActionListener() {
@@ -178,12 +192,77 @@ public class JavaDBEx1 extends javax.swing.JFrame {
     private void firstButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_firstButtonActionPerformed
         // TODO add your handling code here:
         
-        authorIDTextPane.setText("");
+       try {
+                
+              //create the connection object
+              //ATTN: username and password must be changed depending on the settings on your database server
+              Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/books", "sduser", "pass");
+
+              //create a statement object.
+	      //We will use this object to carry our query to the database
+	      Statement statement = connection.createStatement();
+
+              //exexute our query, which will lead to the return of a resultset
+	      ResultSet resultSet = statement.executeQuery("SELECT * FROM authors");
+              
+              String results="";
+              resultSet.next();
+              results+=resultSet.getObject(trackNum);
+              authorIDTextPane.setText(results);
+              results="";
+              results+=resultSet.getObject(trackNum+1);
+              firstNameTextPane.setText(results);
+              results="";
+              results+=resultSet.getObject(trackNum+2);
+              lastNameTextPane.setText(results);
+              statement.close();
+              connection.close();
+        }
+        
+        catch(SQLException sqlex) {
+            JOptionPane.showMessageDialog(null, sqlex.toString());
+            System.exit(0);
+	}
         
     }//GEN-LAST:event_firstButtonActionPerformed
 
     private void nextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextButtonActionPerformed
         // TODO add your handling code here:
+        buttonPressed++;
+        try {
+
+              //create the connection object
+              //ATTN: username and password must be changed depending on the settings on your database server
+              Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/books", "sduser", "pass");
+
+              //create a statement object.
+	      //We will use this object to carry our query to the database
+	      Statement statement = connection.createStatement();
+
+              //exexute our query, which will lead to the return of a resultset
+	      ResultSet resultSet = statement.executeQuery("SELECT * FROM authors");
+              
+              String results="";
+              int i=0;
+              while(i<buttonPressed)
+              {
+                resultSet.next();
+                i++;
+              }
+              results+=resultSet.getObject(trackNum);
+              authorIDTextPane.setText(results);
+              results="";
+              results+=resultSet.getObject(trackNum+1);
+              firstNameTextPane.setText(results);
+              results="";
+              results+=resultSet.getObject(trackNum+2);
+              lastNameTextPane.setText(results);
+        }
+        
+        catch(SQLException sqlex) {
+            JOptionPane.showMessageDialog(null, sqlex.toString());
+            System.exit(0);
+	}
         
     }//GEN-LAST:event_nextButtonActionPerformed
 
@@ -191,6 +270,80 @@ public class JavaDBEx1 extends javax.swing.JFrame {
         // TODO add your handling code here:
         System.exit(0);
     }//GEN-LAST:event_exitButtonActionPerformed
+
+    private void lastButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lastButtonActionPerformed
+        // TODO add your handling code here:
+        try {
+
+              //create the connection object
+              //ATTN: username and password must be changed depending on the settings on your database server
+              Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/books", "sduser", "pass");
+
+              //create a statement object.
+	      //We will use this object to carry our query to the database
+	      Statement statement = connection.createStatement();
+
+              //exexute our query, which will lead to the return of a resultset
+	      ResultSet resultSet = statement.executeQuery("SELECT * FROM authors");
+              
+              String results="";
+              resultSet.next();
+              resultSet.next();
+              resultSet.next();
+              results+=resultSet.getObject(trackNum);
+              authorIDTextPane.setText(results);
+              results="";
+              results+=resultSet.getObject(trackNum+1);
+              firstNameTextPane.setText(results);
+              results="";
+              results+=resultSet.getObject(trackNum+2);
+              lastNameTextPane.setText(results);
+        }
+        
+        catch(SQLException sqlex) {
+            JOptionPane.showMessageDialog(null, sqlex.toString());
+            System.exit(0);
+	}
+    }//GEN-LAST:event_lastButtonActionPerformed
+
+    private void previousButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_previousButtonActionPerformed
+        // TODO add your handling code here:
+        buttonPressed++;
+        try {
+
+              //create the connection object
+              //ATTN: username and password must be changed depending on the settings on your database server
+              Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/books", "sduser", "pass");
+
+              //create a statement object.
+	      //We will use this object to carry our query to the database
+	      Statement statement = connection.createStatement();
+
+              //exexute our query, which will lead to the return of a resultset
+	      ResultSet resultSet = statement.executeQuery("SELECT * FROM authors");
+              
+              String results="";
+              int i=buttonPressed;
+              while(i>buttonPressed)
+              {
+                resultSet.next();
+                i--;
+              }
+              results+=resultSet.getObject(trackNum);
+              authorIDTextPane.setText(results);
+              results="";
+              results+=resultSet.getObject(trackNum+1);
+              firstNameTextPane.setText(results);
+              results="";
+              results+=resultSet.getObject(trackNum+2);
+              lastNameTextPane.setText(results);
+        }
+        
+        catch(SQLException sqlex) {
+            JOptionPane.showMessageDialog(null, sqlex.toString());
+            System.exit(0);
+	}
+    }//GEN-LAST:event_previousButtonActionPerformed
 
     /**
      * @param args the command line arguments
