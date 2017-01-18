@@ -38,8 +38,15 @@ public class JavaDBEx1 extends javax.swing.JFrame {
 	      ResultSet resultSet = statement.executeQuery("SELECT * FROM authors");
               
               String results="";
-              
+              resultSet.next();
+              results+=resultSet.getObject(1);
               authorIDTextPane.setText(results);
+              results="";
+              results+=resultSet.getObject(2);
+              firstNameTextPane.setText(results);
+              results="";
+              results+=resultSet.getObject(3);
+              lastNameTextPane.setText(results);
         }
         
         catch(SQLException sqlex) {
@@ -94,12 +101,22 @@ public class JavaDBEx1 extends javax.swing.JFrame {
         });
 
         nextButton.setText("Next>>");
+        nextButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nextButtonActionPerformed(evt);
+            }
+        });
 
         previousButton.setText("<<Previous");
 
         lastButton.setText("Last");
 
         exitButton.setText("Exit");
+        exitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -113,7 +130,7 @@ public class JavaDBEx1 extends javax.swing.JFrame {
                             .addComponent(authorID, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(firstName, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lastName, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(116, 116, 116)
+                        .addGap(118, 118, 118)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -161,7 +178,19 @@ public class JavaDBEx1 extends javax.swing.JFrame {
     private void firstButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_firstButtonActionPerformed
         // TODO add your handling code here:
         
+        authorIDTextPane.setText("");
+        
     }//GEN-LAST:event_firstButtonActionPerformed
+
+    private void nextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextButtonActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_nextButtonActionPerformed
+
+    private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_exitButtonActionPerformed
 
     /**
      * @param args the command line arguments

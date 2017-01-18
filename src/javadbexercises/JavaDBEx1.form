@@ -32,7 +32,7 @@
                           <Component id="firstName" alignment="0" min="-2" pref="60" max="-2" attributes="0"/>
                           <Component id="lastName" alignment="0" min="-2" pref="60" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="116" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="118" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jScrollPane3" min="-2" pref="147" max="-2" attributes="0"/>
                           <Component id="jScrollPane2" min="-2" pref="147" max="-2" attributes="0"/>
@@ -147,6 +147,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Next&gt;&gt;"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="nextButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="previousButton">
       <Properties>
@@ -162,6 +165,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Exit"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="exitButtonActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
