@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
  */
 public class JavaDBEx1 extends javax.swing.JFrame {
 
+    ResultSet resultSet;
     /**
      * Creates new form JavaDBEx1
      */
@@ -39,18 +40,16 @@ public class JavaDBEx1 extends javax.swing.JFrame {
 	      Statement statement = connection.createStatement();
 
               //exexute our query, which will lead to the return of a resultset
-	      ResultSet resultSet = statement.executeQuery("SELECT * FROM authors");
+	      resultSet = statement.executeQuery("SELECT * FROM authors");
               
-              String results="";
-              resultSet.next();
-              results+=resultSet.getObject(trackNum);
-              authorIDTextPane.setText(results);
-              results="";
-              results+=resultSet.getObject(trackNum+1);
-              firstNameTextPane.setText(results);
-              results="";
-              results+=resultSet.getObject(trackNum+2);
-              lastNameTextPane.setText(results);
+              if (resultSet.next()) {
+                loadRecord();
+              } //end if
+      
+              else {
+                JOptionPane.showMessageDialog(null, "There are no records in the database");
+              } //end else
+        
         }
         
         catch(SQLException sqlex) {
@@ -58,6 +57,22 @@ public class JavaDBEx1 extends javax.swing.JFrame {
             System.exit(0);
 	}
     }
+    
+    public void loadRecord() {
+        
+        try  {
+            String authorsID = resultSet.getObject(1).toString();
+            String authorsFirstName = resultSet.getObject(2).toString();
+            String authorsSecondName = resultSet.getObject(3).toString();
+
+            authorIDTextField.setText(authorsID);
+            firstNameTextField.setText(authorsFirstName);
+            lastNameTextField.setText(authorsSecondName);    
+        }
+        catch(Exception ex) {
+            JOptionPane.showMessageDialog(null, "ERROR " + ex);
+        }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -68,13 +83,7 @@ public class JavaDBEx1 extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        authorIDTextPane = new javax.swing.JTextPane();
         authorID = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        lastNameTextPane = new javax.swing.JTextPane();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        firstNameTextPane = new javax.swing.JTextPane();
         firstName = new javax.swing.JLabel();
         lastName = new javax.swing.JLabel();
         firstButton = new javax.swing.JButton();
@@ -82,16 +91,13 @@ public class JavaDBEx1 extends javax.swing.JFrame {
         previousButton = new javax.swing.JButton();
         lastButton = new javax.swing.JButton();
         exitButton = new javax.swing.JButton();
+        firstNameTextField = new javax.swing.JTextField();
+        lastNameTextField = new javax.swing.JTextField();
+        authorIDTextField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jScrollPane1.setViewportView(authorIDTextPane);
-
         authorID.setText("Author ID");
-
-        jScrollPane2.setViewportView(lastNameTextPane);
-
-        jScrollPane3.setViewportView(firstNameTextPane);
 
         firstName.setText("First Name");
 
@@ -132,6 +138,12 @@ public class JavaDBEx1 extends javax.swing.JFrame {
             }
         });
 
+        firstNameTextField.setEditable(false);
+
+        lastNameTextField.setEditable(false);
+
+        authorIDTextField.setEditable(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -139,16 +151,6 @@ public class JavaDBEx1 extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(authorID, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(firstName, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lastName, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(118, 118, 118)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(firstButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -158,8 +160,23 @@ public class JavaDBEx1 extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lastButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(exitButton)))
-                .addGap(0, 0, 0))
+                        .addComponent(exitButton)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(firstName, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(110, 110, 110)
+                                .addComponent(firstNameTextField))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(authorID, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(110, 110, 110)
+                                .addComponent(authorIDTextField))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lastName, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(110, 110, 110)
+                                .addComponent(lastNameTextField)))
+                        .addGap(24, 24, 24))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -167,22 +184,23 @@ public class JavaDBEx1 extends javax.swing.JFrame {
                 .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(authorID)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(authorIDTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(firstName))
-                .addGap(18, 18, 18)
+                    .addComponent(firstName)
+                    .addComponent(firstNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lastName))
-                .addGap(36, 36, 36)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(firstButton)
-                    .addComponent(nextButton)
-                    .addComponent(previousButton)
-                    .addComponent(lastButton)
-                    .addComponent(exitButton))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lastName)
+                        .addGap(75, 75, 75)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(firstButton)
+                            .addComponent(nextButton)
+                            .addComponent(previousButton)
+                            .addComponent(lastButton)
+                            .addComponent(exitButton)))
+                    .addComponent(lastNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -193,76 +211,28 @@ public class JavaDBEx1 extends javax.swing.JFrame {
         // TODO add your handling code here:
         
        try {
-                
-              //create the connection object
-              //ATTN: username and password must be changed depending on the settings on your database server
-              Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/books", "sduser", "pass");
-
-              //create a statement object.
-	      //We will use this object to carry our query to the database
-	      Statement statement = connection.createStatement();
-
-              //exexute our query, which will lead to the return of a resultset
-	      ResultSet resultSet = statement.executeQuery("SELECT * FROM authors");
-              
-              String results="";
-              resultSet.next();
-              results+=resultSet.getObject(trackNum);
-              authorIDTextPane.setText(results);
-              results="";
-              results+=resultSet.getObject(trackNum+1);
-              firstNameTextPane.setText(results);
-              results="";
-              results+=resultSet.getObject(trackNum+2);
-              lastNameTextPane.setText(results);
-              statement.close();
-              connection.close();
+            resultSet.first();
+            loadRecord();
+        } catch (SQLException ex) {
+             JOptionPane.showMessageDialog(null, "ERROR" + ex);
         }
-        
-        catch(SQLException sqlex) {
-            JOptionPane.showMessageDialog(null, sqlex.toString());
-            System.exit(0);
-	}
         
     }//GEN-LAST:event_firstButtonActionPerformed
 
     private void nextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextButtonActionPerformed
         // TODO add your handling code here:
-        buttonPressed++;
-        try {
-
-              //create the connection object
-              //ATTN: username and password must be changed depending on the settings on your database server
-              Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/books", "sduser", "pass");
-
-              //create a statement object.
-	      //We will use this object to carry our query to the database
-	      Statement statement = connection.createStatement();
-
-              //exexute our query, which will lead to the return of a resultset
-	      ResultSet resultSet = statement.executeQuery("SELECT * FROM authors");
-              
-              String results="";
-              int i=0;
-              while(i<buttonPressed)
-              {
-                resultSet.next();
-                i++;
-              }
-              results+=resultSet.getObject(trackNum);
-              authorIDTextPane.setText(results);
-              results="";
-              results+=resultSet.getObject(trackNum+1);
-              firstNameTextPane.setText(results);
-              results="";
-              results+=resultSet.getObject(trackNum+2);
-              lastNameTextPane.setText(results);
-        }
-        
-        catch(SQLException sqlex) {
-            JOptionPane.showMessageDialog(null, sqlex.toString());
-            System.exit(0);
-	}
+        try  {
+            if (resultSet.next()) {
+                loadRecord();
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "You have reached the end of the list");
+                resultSet.last();
+            }
+        }//end try
+        catch(Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.toString());
+        }//end catch
         
     }//GEN-LAST:event_nextButtonActionPerformed
 
@@ -274,75 +244,27 @@ public class JavaDBEx1 extends javax.swing.JFrame {
     private void lastButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lastButtonActionPerformed
         // TODO add your handling code here:
         try {
-
-              //create the connection object
-              //ATTN: username and password must be changed depending on the settings on your database server
-              Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/books", "sduser", "pass");
-
-              //create a statement object.
-	      //We will use this object to carry our query to the database
-	      Statement statement = connection.createStatement();
-
-              //exexute our query, which will lead to the return of a resultset
-	      ResultSet resultSet = statement.executeQuery("SELECT * FROM authors");
-              
-              String results="";
-              resultSet.next();
-              resultSet.next();
-              resultSet.next();
-              results+=resultSet.getObject(trackNum);
-              authorIDTextPane.setText(results);
-              results="";
-              results+=resultSet.getObject(trackNum+1);
-              firstNameTextPane.setText(results);
-              results="";
-              results+=resultSet.getObject(trackNum+2);
-              lastNameTextPane.setText(results);
+            resultSet.last();
+            loadRecord();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "ERROR" + ex);
         }
-        
-        catch(SQLException sqlex) {
-            JOptionPane.showMessageDialog(null, sqlex.toString());
-            System.exit(0);
-	}
     }//GEN-LAST:event_lastButtonActionPerformed
 
     private void previousButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_previousButtonActionPerformed
         // TODO add your handling code here:
-        buttonPressed++;
-        try {
-
-              //create the connection object
-              //ATTN: username and password must be changed depending on the settings on your database server
-              Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/books", "sduser", "pass");
-
-              //create a statement object.
-	      //We will use this object to carry our query to the database
-	      Statement statement = connection.createStatement();
-
-              //exexute our query, which will lead to the return of a resultset
-	      ResultSet resultSet = statement.executeQuery("SELECT * FROM authors");
-              
-              String results="";
-              int i=buttonPressed;
-              while(i>buttonPressed)
-              {
-                resultSet.next();
-                i--;
-              }
-              results+=resultSet.getObject(trackNum);
-              authorIDTextPane.setText(results);
-              results="";
-              results+=resultSet.getObject(trackNum+1);
-              firstNameTextPane.setText(results);
-              results="";
-              results+=resultSet.getObject(trackNum+2);
-              lastNameTextPane.setText(results);
-        }
-        
-        catch(SQLException sqlex) {
-            JOptionPane.showMessageDialog(null, sqlex.toString());
-            System.exit(0);
-	}
+        try  {
+            if (resultSet.previous()) {
+                loadRecord();
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "You have reached the start of the list");
+                resultSet.first();
+            }
+        }//end try
+        catch(Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.toString());
+        }//end catch
     }//GEN-LAST:event_previousButtonActionPerformed
 
     /**
@@ -382,17 +304,14 @@ public class JavaDBEx1 extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel authorID;
-    private javax.swing.JTextPane authorIDTextPane;
+    private javax.swing.JTextField authorIDTextField;
     private javax.swing.JButton exitButton;
     private javax.swing.JButton firstButton;
     private javax.swing.JLabel firstName;
-    private javax.swing.JTextPane firstNameTextPane;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTextField firstNameTextField;
     private javax.swing.JButton lastButton;
     private javax.swing.JLabel lastName;
-    private javax.swing.JTextPane lastNameTextPane;
+    private javax.swing.JTextField lastNameTextField;
     private javax.swing.JButton nextButton;
     private javax.swing.JButton previousButton;
     // End of variables declaration//GEN-END:variables
