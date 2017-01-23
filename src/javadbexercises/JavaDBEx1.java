@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.YES_NO_OPTION;
 
 /**
  *
@@ -42,7 +43,8 @@ public class JavaDBEx1 extends javax.swing.JFrame {
               //exexute our query, which will lead to the return of a resultset
 	      resultSet = statement.executeQuery("SELECT * FROM authors");
               
-              if (resultSet.next()) {
+              if (resultSet.next()) 
+              {
                 loadRecord();
               } //end if
       
@@ -66,7 +68,7 @@ public class JavaDBEx1 extends javax.swing.JFrame {
             String authorsSecondName = resultSet.getObject(3).toString();
 
             authorIDTextField.setText(authorsID);
-            firstNameTextField.setText(authorsFirstName);
+            firstNameTextArea.setText(authorsFirstName);
             lastNameTextField.setText(authorsSecondName);    
         }
         catch(Exception ex) {
@@ -91,9 +93,13 @@ public class JavaDBEx1 extends javax.swing.JFrame {
         previousButton = new javax.swing.JButton();
         lastButton = new javax.swing.JButton();
         exitButton = new javax.swing.JButton();
-        firstNameTextField = new javax.swing.JTextField();
         lastNameTextField = new javax.swing.JTextField();
         authorIDTextField = new javax.swing.JTextField();
+        updateButton = new javax.swing.JButton();
+        insertButton = new javax.swing.JButton();
+        deleteButton = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        firstNameTextArea = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -138,11 +144,50 @@ public class JavaDBEx1 extends javax.swing.JFrame {
             }
         });
 
-        firstNameTextField.setEditable(false);
-
         lastNameTextField.setEditable(false);
+        lastNameTextField.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lastNameTextFieldMouseClicked(evt);
+            }
+        });
 
         authorIDTextField.setEditable(false);
+        authorIDTextField.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                authorIDTextFieldMouseClicked(evt);
+            }
+        });
+
+        updateButton.setText("Update");
+        updateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateButtonActionPerformed(evt);
+            }
+        });
+
+        insertButton.setText("Insert");
+        insertButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                insertButtonActionPerformed(evt);
+            }
+        });
+
+        deleteButton.setText("Delete");
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButtonActionPerformed(evt);
+            }
+        });
+
+        firstNameTextArea.setEditable(false);
+        firstNameTextArea.setColumns(20);
+        firstNameTextArea.setRows(5);
+        firstNameTextArea.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                firstNameTextAreaMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(firstNameTextArea);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -152,6 +197,14 @@ public class JavaDBEx1 extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(authorID, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(110, 110, 110)
+                        .addComponent(authorIDTextField))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(lastName, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(110, 110, 110)
+                        .addComponent(lastNameTextField))
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(firstButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(nextButton)
@@ -160,23 +213,19 @@ public class JavaDBEx1 extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lastButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(updateButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(insertButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(deleteButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(exitButton)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(firstName, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(110, 110, 110)
-                                .addComponent(firstNameTextField))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(authorID, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(110, 110, 110)
-                                .addComponent(authorIDTextField))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lastName, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(110, 110, 110)
-                                .addComponent(lastNameTextField)))
-                        .addGap(24, 24, 24))))
+                        .addGap(0, 11, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(firstName, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(110, 110, 110)
+                        .addComponent(jScrollPane1)))
+                .addGap(24, 24, 24))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -188,7 +237,7 @@ public class JavaDBEx1 extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(firstName)
-                    .addComponent(firstNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -199,7 +248,10 @@ public class JavaDBEx1 extends javax.swing.JFrame {
                             .addComponent(nextButton)
                             .addComponent(previousButton)
                             .addComponent(lastButton)
-                            .addComponent(exitButton)))
+                            .addComponent(exitButton)
+                            .addComponent(updateButton)
+                            .addComponent(insertButton)
+                            .addComponent(deleteButton)))
                     .addComponent(lastNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -230,7 +282,7 @@ public class JavaDBEx1 extends javax.swing.JFrame {
                 resultSet.last();
             }
         }//end try
-        catch(Exception ex) {
+        catch(SQLException ex) {
             JOptionPane.showMessageDialog(null, ex.toString());
         }//end catch
         
@@ -262,10 +314,106 @@ public class JavaDBEx1 extends javax.swing.JFrame {
                 resultSet.first();
             }
         }//end try
-        catch(Exception ex) {
+        catch(SQLException ex) {
             JOptionPane.showMessageDialog(null, ex.toString());
         }//end catch
     }//GEN-LAST:event_previousButtonActionPerformed
+
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        // TODO add your handling code here:
+        int dialogButton = JOptionPane.YES_NO_OPTION;
+        int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure, you would like to delete this row?","Warning",dialogButton);
+        
+        /*try
+        {
+            
+        }
+        catch(SQLException sqlex) {
+            JOptionPane.showMessageDialog(null, sqlex.toString());
+            System.exit(0);
+        }*/
+        
+        
+    }//GEN-LAST:event_deleteButtonActionPerformed
+
+    private void authorIDTextFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_authorIDTextFieldMouseClicked
+        // TODO add your handling code here:
+        authorIDTextField.setEditable(true);
+    }//GEN-LAST:event_authorIDTextFieldMouseClicked
+
+    private void lastNameTextFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lastNameTextFieldMouseClicked
+        // TODO add your handling code here:
+        lastNameTextField.setEditable(true);
+    }//GEN-LAST:event_lastNameTextFieldMouseClicked
+
+    private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
+        // TODO add your handling code here:        
+        String fName = firstNameTextArea.getText();
+        String lName = lastNameTextField.getText();
+        String aID= authorIDTextField.getText();
+        try{
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/books", "sduser", "pass");
+
+	    //create a statement object.
+	    //We will use this object to carry our query to the database
+	    Statement statement = connection.createStatement();
+
+            String updatetSQL = "UPDATE authors SET FirstName = '"+fName+"', LastName = '"+lName+"' WHERE AuthorID = '"+ aID+"'";
+
+            int rowCount = statement.executeUpdate(updatetSQL);
+            
+            statement.close();
+            connection.close();
+            
+            }//end try
+        catch(Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.toString());
+        }//end catch
+        
+    }//GEN-LAST:event_updateButtonActionPerformed
+
+    private void insertButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertButtonActionPerformed
+        // TODO add your handling code here:
+         try
+        {
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/books", "sduser", "pass");
+
+	     
+	    //We will use this object to carry our query to the database
+	    Statement statement = connection.createStatement();
+            
+            String input = JOptionPane.showInputDialog("Input Author ID: ");
+            int aID= Integer.parseInt(input);
+              
+            String fName = JOptionPane.showInputDialog("Input Author First Name: ");
+            String lName = JOptionPane.showInputDialog("Input Author Last Name: ");
+            
+            input  = JOptionPane.showInputDialog("Input Author Year Born: ");
+            int aYB=Integer.parseInt(input);
+            
+            String insertSQL = "INSERT INTO authors(AuthorID, FirstName, LastName, YearBorn)VALUES ('"+aID+"','"+fName+"' , '"+lName+"', '"+aYB+"')";
+            int rowCount = statement.executeUpdate(insertSQL);
+            
+            JOptionPane.showMessageDialog(rootPane, aID +" "+ fName +" "+ lName +" "+ aYB + " Have been added to the Database!");
+            
+            loadRecord();
+            
+            statement.close();
+            connection.close();
+            
+        }
+        catch(SQLException sqlex) {
+            JOptionPane.showMessageDialog(null, sqlex.toString());
+            System.exit(0);
+        }
+        
+        
+    }//GEN-LAST:event_insertButtonActionPerformed
+
+    private void firstNameTextAreaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_firstNameTextAreaMouseClicked
+        // TODO add your handling code here:
+        firstNameTextArea.setEditable(true);
+    }//GEN-LAST:event_firstNameTextAreaMouseClicked
 
     /**
      * @param args the command line arguments
@@ -305,14 +453,18 @@ public class JavaDBEx1 extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel authorID;
     private javax.swing.JTextField authorIDTextField;
+    private javax.swing.JButton deleteButton;
     private javax.swing.JButton exitButton;
     private javax.swing.JButton firstButton;
     private javax.swing.JLabel firstName;
-    private javax.swing.JTextField firstNameTextField;
+    private javax.swing.JTextArea firstNameTextArea;
+    private javax.swing.JButton insertButton;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton lastButton;
     private javax.swing.JLabel lastName;
     private javax.swing.JTextField lastNameTextField;
     private javax.swing.JButton nextButton;
     private javax.swing.JButton previousButton;
+    private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
 }
