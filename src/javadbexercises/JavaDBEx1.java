@@ -360,11 +360,11 @@ public class JavaDBEx1 extends javax.swing.JFrame {
 
             String updatetSQL = "UPDATE authors SET FirstName = '"+fName+"', LastName = '"+lName+"' WHERE AuthorID = '"+ aID+"'";
 
-            int rowCount = statement.executeUpdate(updatetSQL);
+             int rowcount= statement.executeUpdate(updatetSQL);
             
             statement.close();
             connection.close();
-            
+            resultSet.refreshRow();
             }//end try
         catch(Exception ex) {
             JOptionPane.showMessageDialog(null, ex.toString());
@@ -396,11 +396,9 @@ public class JavaDBEx1 extends javax.swing.JFrame {
             
             JOptionPane.showMessageDialog(rootPane, aID +" "+ fName +" "+ lName +" "+ aYB + " Have been added to the Database!");
             
-            loadRecord();
-            
             statement.close();
             connection.close();
-            
+            loadRecord();
         }
         catch(SQLException sqlex) {
             JOptionPane.showMessageDialog(null, sqlex.toString());
