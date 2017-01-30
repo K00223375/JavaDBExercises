@@ -368,16 +368,11 @@ public final class JavaDBEx1 extends javax.swing.JFrame {
                resultSet.updateString("FirstName", fNameTextField.getText());
                resultSet.updateString("LastName", lastNameTextField.getText());
 
-<<<<<<< HEAD
-             int rowcount= statement.executeUpdate(updatetSQL);
-            
-            statement.close();
-            connection.close();
             resultSet.refreshRow();
-=======
+
                //update the underlying db
                resultSet.updateRow();
->>>>>>> origin/master
+
             }//end try
         catch(SQLException ex) {
             JOptionPane.showMessageDialog(null, ex.toString());
@@ -403,23 +398,13 @@ public final class JavaDBEx1 extends javax.swing.JFrame {
            
             input  = JOptionPane.showInputDialog("Input Author Year Born: ");
             resultSet.updateInt("YearBorn", Integer.parseInt(input));
-            
-<<<<<<< HEAD
-            String insertSQL = "INSERT INTO authors(AuthorID, FirstName, LastName, YearBorn)VALUES ('"+aID+"','"+fName+"' , '"+lName+"', '"+aYB+"')";
-            int rowCount = statement.executeUpdate(insertSQL);
-            
-            JOptionPane.showMessageDialog(rootPane, aID +" "+ fName +" "+ lName +" "+ aYB + " Have been added to the Database!");
-            
-            statement.close();
-            connection.close();
-            loadRecord();
-=======
+           
             resultSet.insertRow();
             JOptionPane.showMessageDialog(null, "Record Inserted");
             
            
             
->>>>>>> origin/master
+
         }
         catch(SQLException sqlex) {
             JOptionPane.showMessageDialog(null, sqlex.toString());
